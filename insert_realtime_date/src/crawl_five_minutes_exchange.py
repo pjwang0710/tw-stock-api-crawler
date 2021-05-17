@@ -3,11 +3,9 @@ import asyncio
 from aiohttp import ClientSession, TCPConnector, ClientTimeout
 import random
 import tenacity
-from dotenv import load_dotenv
+
 from sqlalchemy import create_engine
 from .config import settings
-
-load_dotenv('.env')
 
 mysql_engine = create_engine(settings.SQLALCHEMY_WAREHOUSE_URI, pool_pre_ping=True)
 

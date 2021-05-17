@@ -29,5 +29,4 @@ def get_settings(env):
     return Testing()
 
 
-print(os.listdir('./'))
 settings = get_settings('TESTING')

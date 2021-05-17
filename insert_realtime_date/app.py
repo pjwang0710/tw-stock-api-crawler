@@ -7,11 +7,7 @@ from insert_realtime_date.src.config import settings
 from insert_realtime_date.src.crawl_one_minute_stick import run as stick_run
 from insert_realtime_date.src.crawl_five_minutes_exchange import run as exchange_run
 
-
-total_one_minute_stick = Counter('crawl_one_minute_k_stick', 'Total one minute k stick count')
-total_five_seconds_exchange = Counter('crawl_five_seconds_exchange', 'Total five seconds exchange')
 scheduler = AsyncIOScheduler()
-
 
 app = FastAPI(
     title=settings.PROJECT_NAME, openapi_url=f'{settings.API_V1_STR}/openapi.json'
@@ -49,8 +45,8 @@ async def home():
 @app.on_event('startup')
 async def startup():
     scheduler.start()
-    scheduler.add_job(run_crawl_one_minute_stick, 'cron', hour='9-14', minute='*', second=5, id='run_crawl_one_minute_stick')
-    scheduler.add_job(run_crawl_five_seconds_exchange, 'cron', hour='9-14', minute='*', second='*/15', id='run_crawl_five_seconds_exchange')
+    scheduler.add_job(run_crawl_one_minute_stick, 'cron', hour='9-13', minute='*', second=5, id='run_crawl_one_minute_stick')
+    scheduler.add_job(run_crawl_five_seconds_exchange, 'cron', hour='9-13', minute='*', second='*/15', id='run_crawl_five_seconds_exchange')
 
 
 @app.on_event('shutdown')
@@ -60,6 +56,9 @@ async def shutdown():
 
 
 if __name__ == '__main__':
+    global total_one_minute_stick, total_five_seconds_exchange
+    total_one_minute_stick = Counter('crawl_one_minute_k_stick', 'Total one minute k stick count')
+    total_five_seconds_exchange = Counter('crawl_five_seconds_exchange', 'Total five seconds exchange')
     uvicorn.run('app:app',
                 host='0.0.0.0',
                 port=8000,
