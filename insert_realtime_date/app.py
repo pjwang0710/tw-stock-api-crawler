@@ -55,12 +55,16 @@ async def shutdown():
     scheduler.remove_job('run_crawl_five_seconds_exchange')
 
 
+
+
 if __name__ == '__main__':
     global total_one_minute_stick, total_five_seconds_exchange
     total_one_minute_stick = Counter('crawl_one_minute_k_stick', 'Total one minute k stick count')
     total_five_seconds_exchange = Counter('crawl_five_seconds_exchange', 'Total five seconds exchange')
-    uvicorn.run('app:app',
-                host='0.0.0.0',
-                port=8000,
-                log_level='info',
-                reload=True)
+    run_crawl_one_minute_stick()
+    run_crawl_five_seconds_exchange()
+    # uvicorn.run('app:app',
+    #             host='0.0.0.0',
+    #             port=8000,
+    #             log_level='info',
+    #             reload=True)
