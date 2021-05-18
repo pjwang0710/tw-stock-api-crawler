@@ -7,20 +7,18 @@ from insert_realtime_date.src.config import settings
 from insert_realtime_date.src.crawl_one_minute_stick import run as stick_run
 from insert_realtime_date.src.crawl_five_minutes_exchange import run as exchange_run
 
+
 scheduler = AsyncIOScheduler()
 
-# global total_one_minute_stick, total_five_seconds_exchange
-total_one_minute_stick = Counter('crawl_one_minute_k_stick', 'Total one minute k stick count')    
-total_five_seconds_exchange = Counter('crawl_five_seconds_exchange', 'Total five seconds exchange')
-
-
-app = FastAPI(
-    title=settings.PROJECT_NAME, openapi_url=f'{settings.API_V1_STR}/openapi.json'
-)
+try:
+    total_one_minute_stick = Counter('crawl_one_minute_k_stick', 'Total one minute k stick count')    
+    total_five_seconds_exchange = Counter('crawl_five_seconds_exchange', 'Total five seconds exchange')
+except Exception:
+    pass
 
 
 def get_application():
-    _app = FastAPI(title=settings.PROJECT_NAME)
+    _app = FastAPI(title=settings.PROJECT_NAME, openapi_url=f'{settings.API_V1_STR}/openapi.json')
 
     return _app
 
@@ -38,7 +36,6 @@ def run_crawl_one_minute_stick():
 
 def run_crawl_five_seconds_exchange():
     print('start crawling five seconds exchange...')
-    
     crawl_data_length = exchange_run()
     total_five_seconds_exchange.inc(crawl_data_length)
 
