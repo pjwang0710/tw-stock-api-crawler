@@ -45,8 +45,8 @@ async def home():
 @app.on_event('startup')
 async def startup():
     scheduler.start()
-    scheduler.add_job(run_crawl_one_minute_stick, 'cron', hour='9-13', minute='*', second=5, id='run_crawl_one_minute_stick')
-    scheduler.add_job(run_crawl_five_seconds_exchange, 'cron', hour='9-13', minute='*', second='*/15', id='run_crawl_five_seconds_exchange')
+    scheduler.add_job(run_crawl_one_minute_stick, 'cron', hour='1-5', minute='*', second=5, id='run_crawl_one_minute_stick')
+    scheduler.add_job(run_crawl_five_seconds_exchange, 'cron', hour='1-5', minute='*', second='*/15', id='run_crawl_five_seconds_exchange')
 
 
 @app.on_event('shutdown')
