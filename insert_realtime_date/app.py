@@ -2,6 +2,7 @@ from fastapi import FastAPI
 import uvicorn
 from starlette_exporter import PrometheusMiddleware, handle_metrics
 from prometheus_client import Counter
+from prometheus_client.core import CollectorRegistry
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from insert_realtime_date.src.config import settings
 from insert_realtime_date.src.crawl_one_minute_stick import run as stick_run
@@ -10,15 +11,10 @@ from insert_realtime_date.src.crawl_five_minutes_exchange import run as exchange
 
 scheduler = AsyncIOScheduler()
 
-try:
-    total_one_minute_stick = Counter('crawl_one_minute_k_stick', 'Total one minute k stick count')    
-except Exception:
-    pass
+registry = CollectorRegistry(auto_describe=False)
 
-try:
-    total_five_seconds_exchange = Counter('crawl_five_seconds_exchange', 'Total five seconds exchange')
-except Exception:
-    pass
+total_one_minute_stick = Counter('crawl_one_minute_k_stick', 'Total one minute k stick count', registry=registry)
+total_five_seconds_exchange = Counter('crawl_five_seconds_exchange', 'Total five seconds exchange', registry=registry)
 
 
 def get_application():
