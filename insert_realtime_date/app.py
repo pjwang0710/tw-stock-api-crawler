@@ -12,6 +12,10 @@ scheduler = AsyncIOScheduler()
 
 try:
     total_one_minute_stick = Counter('crawl_one_minute_k_stick', 'Total one minute k stick count')    
+except Exception:
+    pass
+
+try:
     total_five_seconds_exchange = Counter('crawl_five_seconds_exchange', 'Total five seconds exchange')
 except Exception:
     pass
