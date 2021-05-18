@@ -11,7 +11,7 @@ from insert_realtime_date.src.crawl_five_minutes_exchange import run as exchange
 
 scheduler = AsyncIOScheduler()
 
-registry = CollectorRegistry(auto_describe=False)
+registry = CollectorRegistry(auto_describe=True)
 
 total_one_minute_stick = Counter('crawl_one_minute_k_stick', 'Total one minute k stick count', registry=registry)
 total_five_seconds_exchange = Counter('crawl_five_seconds_exchange', 'Total five seconds exchange', registry=registry)
