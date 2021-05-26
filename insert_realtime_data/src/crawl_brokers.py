@@ -81,6 +81,7 @@ async def get_url(i, url, session):
         r = await response.text(encoding='big5-hkscs')
         data = parse_html(r, url[1], url[2], url[3], url[4], url[5])
         if data != []:
+            print(i, 'finished')
             insert_to_db(data)
             config.data += len(data)
 
