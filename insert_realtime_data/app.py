@@ -159,7 +159,6 @@ async def shutdown():
 
 
 if __name__ == '__main__':
-    cmoney_run('籌碼K線')
     uvicorn.run('app:app',
                 host='0.0.0.0',
                 port=8000,
