@@ -3,13 +3,11 @@ from aiohttp import ClientSession, TCPConnector, ClientTimeout
 import random
 import tenacity
 from sqlalchemy import create_engine
-# from .config import settings
+from .config import settings
 from bs4 import BeautifulSoup
 import re
-import datetime
 
-SQLALCHEMY_WAREHOUSE_URI = 'mysql+pymysql://pj:#%Rfb_7)Y<6k3-TP"TY?e6Dv:J6K[;,X@18.181.48.71:3306/stock_api_warehouse'
-mysql_engine = create_engine(SQLALCHEMY_WAREHOUSE_URI, pool_pre_ping=True)
+mysql_engine = create_engine(settings.SQLALCHEMY_WAREHOUSE_URI, pool_pre_ping=True)
 
 with open('proxies.txt', 'r') as f:
     proxies = f.read().split('\n')

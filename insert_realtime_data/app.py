@@ -4,7 +4,7 @@ from starlette_exporter import PrometheusMiddleware, handle_metrics
 from prometheus_client import Counter
 import datetime
 import pytz
-from prometheus_client.core import CollectorRegistry, REGISTRY
+from prometheus_client.core import REGISTRY
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from insert_realtime_date.src.config import settings
 from insert_realtime_date.src.crawl_one_minute_stick import run as stick_run
@@ -15,8 +15,6 @@ tpe = pytz.timezone('Asia/Taipei')
 
 
 scheduler = AsyncIOScheduler()
-
-# registry = CollectorRegistry(auto_describe=True)
 
 collectors = list(REGISTRY._collector_to_names.keys())
 for collector in collectors:
@@ -67,7 +65,7 @@ async def startup():
     scheduler.start()
     scheduler.add_job(run_crawl_one_minute_stick, 'cron', hour='1-5', minute='*', second=5, id='run_crawl_one_minute_stick')
     scheduler.add_job(run_crawl_five_seconds_exchange, 'cron', hour='1-5', minute='*', second='*/15', id='run_crawl_five_seconds_exchange')
-    scheduler.add_job(run_broker_exchange, 'cron', hour='1', minute='0', second='0', id='run_crawl_brokers_exchange')
+    scheduler.add_job(run_broker_exchange, 'cron', hour='17', minute='0', second='0', id='run_crawl_brokers_exchange')
 
 
 @app.on_event('shutdown')
