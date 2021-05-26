@@ -74,14 +74,13 @@ def parse_html(raw_html, broker_id, branch_id, year, month, day):
     return broker_dicts
 
 
-# @tenacity.retry(stop=tenacity.stop_after_attempt(10))
+@tenacity.retry(stop=tenacity.stop_after_attempt(10))
 async def get_url(i, url, session):
     proxy = random.choice(proxies)
     async with session.get(url[0], proxy=proxy) as response:
         r = await response.text(encoding='big5-hkscs')
         data = parse_html(r, url[1], url[2], url[3], url[4], url[5])
         if data != []:
-            print(i, 'finished')
             insert_to_db(data)
             config.data += len(data)
 
