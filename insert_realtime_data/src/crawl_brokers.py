@@ -106,4 +106,4 @@ def run(date_ptr):
     loop.run_until_complete(run_asyncio(brokers, date_ptr))
     return config.data
 
-run(datetime.datetime.now() - datetime.timedelta(days=2))
+run(datetime.datetime.now() - datetime.timedelta(days=8))
