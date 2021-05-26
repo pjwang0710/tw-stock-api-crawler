@@ -82,6 +82,7 @@ async def get_url(i, url, session):
         data = parse_html(r, url[1], url[2], url[3], url[4], url[5])
         if data != []:
             insert_to_db(data)
+            print(i, len(data))
             config.data += len(data)
 
 
