@@ -74,7 +74,7 @@ def parse_html(raw_html, broker_id, branch_id, year, month, day):
     return broker_dicts
 
 
-@tenacity.retry(stop=tenacity.stop_after_attempt(10))
+#@tenacity.retry(stop=tenacity.stop_after_attempt(10))
 async def get_url(i, url, session):
     proxy = random.choice(proxies)
     async with session.get(url[0], proxy=proxy) as response:
