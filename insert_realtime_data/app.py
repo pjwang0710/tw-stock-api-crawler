@@ -131,7 +131,7 @@ async def startup():
     scheduler.add_job(run_crawl_one_minute_stick, 'cron', hour='1-5', minute='*', second=5, id='run_crawl_one_minute_stick')
     scheduler.add_job(run_crawl_five_seconds_exchange, 'cron', hour='1-5', minute='*', second='*/15', id='run_crawl_five_seconds_exchange')
     scheduler.add_job(run_broker_exchange, 'cron', hour='17', minute='0', second='0', id='run_crawl_brokers_exchange')
-    scheduler.add_job(run_crawl_tradersum, 'cron', hour='17', minute='0', second='0', id='run_crawl_tradersum')
+    scheduler.add_job(run_crawl_tradersum, 'cron', hour='1', minute='25', second='0', id='run_crawl_tradersum')
     scheduler.add_job(run_crawl_stock_info, 'cron', day_of_week='mon', hour='0', minute='0', second='0', id='run_crawl_stock_info')
     scheduler.add_job(run_crawl_stock_revenue, 'cron', day_of_week='mon', hour='0', minute='0', second='0', id='run_crawl_stock_revenue')
     scheduler.add_job(run_crawl_reinvestment, 'cron', day_of_week='mon', hour='0', minute='0', second='0', id='run_crawl_reinvestment')
