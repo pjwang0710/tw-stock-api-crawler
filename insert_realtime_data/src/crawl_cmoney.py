@@ -146,7 +146,7 @@ async def run_asyncio(cmkeys_mapping, cmkeys, crawl_type):
 
     timeout = ClientTimeout(total=60)
     client_session = ClientSession(connector=TCPConnector(verify_ssl=False), timeout=timeout)
-    tasks = [asyncio.create_task(get_url(i, new_cmkeys[i], url, headers[i], crawl_type, client_session)) for i, url in enumerate(urls)]
+    tasks = [asyncio.create_task(get_url(i, new_cmkeys[i], url, headers[i], cmkeys_mapping[crawl_type][0], client_session)) for i, url in enumerate(urls)]
     await asyncio.gather(*tasks)
 
 
