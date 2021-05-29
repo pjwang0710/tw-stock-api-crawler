@@ -72,6 +72,12 @@ def run_crawl_tradersum():
     total_tradersum.inc(crawl_data_length)
 
 
+def run_crawl_tradersum_2():
+    print('start crawling tradersum2 ...')
+    crawl_data_length = cmoney_run('籌碼K線2')
+    total_tradersum.inc(crawl_data_length)
+    
+
 def run_crawl_stock_info():
     print('start crawling stock info...')
     crawl_data_length = cmoney_run('基本資料')
@@ -131,7 +137,8 @@ async def startup():
     scheduler.add_job(run_crawl_one_minute_stick, 'cron', hour='1-5', minute='*', second=5, id='run_crawl_one_minute_stick')
     scheduler.add_job(run_crawl_five_seconds_exchange, 'cron', hour='1-5', minute='*', second='*/15', id='run_crawl_five_seconds_exchange')
     scheduler.add_job(run_broker_exchange, 'cron', hour='17', minute='0', second='0', id='run_crawl_brokers_exchange')
-    scheduler.add_job(run_crawl_tradersum, 'cron', hour='1', minute='25', second='0', id='run_crawl_tradersum')
+    scheduler.add_job(run_crawl_tradersum, 'cron', hour='17', minute='0', second='0', id='run_crawl_tradersum')
+    scheduler.add_job(run_crawl_tradersum_2, 'cron', hour='17', minute='0', second='0', id='run_crawl_tradersum2')
     scheduler.add_job(run_crawl_stock_info, 'cron', day_of_week='mon', hour='0', minute='0', second='0', id='run_crawl_stock_info')
     scheduler.add_job(run_crawl_stock_revenue, 'cron', day_of_week='mon', hour='0', minute='0', second='0', id='run_crawl_stock_revenue')
     scheduler.add_job(run_crawl_reinvestment, 'cron', day_of_week='mon', hour='0', minute='0', second='0', id='run_crawl_reinvestment')
@@ -148,6 +155,7 @@ async def shutdown():
     scheduler.remove_job('run_crawl_five_seconds_exchange')
     scheduler.remove_job('run_crawl_brokers_exchange')
     scheduler.remove_job('run_crawl_tradersum')
+    scheduler.remove_job('run_crawl_tradersum2')
     scheduler.remove_job('run_crawl_stock_info')
     scheduler.remove_job('run_crawl_stock_revenue')
     scheduler.remove_job('run_crawl_reinvestment')

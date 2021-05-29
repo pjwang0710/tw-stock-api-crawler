@@ -17,6 +17,7 @@ with open('proxies.txt', 'r') as f:
 
 
 cmkeys_mapping = {
+    '籌碼K線2': ['mainstockimg', 'stockmainkline'], 
     '籌碼K線': ['tradersum', 'stockmainkline'],
     '基本資料': ['GetStockBasicInfo', 'f00026'],
     '營收盈餘': ['GetStockRevenueSurplus', 'f00029'],
@@ -51,7 +52,13 @@ def get_cmoney_stock_id():
 
 
 def insert_to_db(data, CMKey, data_type):
-    if data_type == 'GetStockBasicInfo':
+    if data_type == 'mainstockimg':
+        sql = """
+              INSERT INTO CMoneyKImage (CMKey, Date, OpenPrice, HighPrice, LowPrice, ClosePrice, SaleQty, PriceDifference, MagnitudeOfPrice, SalePrice, CLimit)
+              VALUES ('""" + CMKey + """', %(Date)s, %(OpenPrice)s, %(HighPrice)s, %(LowPrice)s, %(ColsePrice)s, %(SaleQty)s, %(PriceDifference)s, %(MagnitudeOfPrice)s, %(SalePrice)s, %(Limit)s)
+              ON DUPLICATE KEY UPDATE OpenPrice = OpenPrice, HighPrice = HighPrice, LowPrice = LowPrice, ClosePrice = ClosePrice, SaleQty = SaleQty, PriceDifference = PriceDifference, MagnitudeOfPrice = MagnitudeOfPrice, SalePrice = SalePrice, CLimit = CLimit;
+              """
+    elif data_type == 'GetStockBasicInfo':
         sql = """
               INSERT INTO CMoneyStockBasicInfo (CMKey, Address, Business, ChairmanOfTheBoard, CompanyName, Date, DateOfEstablishment, DomesticShare, EnglishAbbreviation, ExportShare, GeneralManager, Industry, ListingDate, MarketPrice, MonthlyRevenue, MonthlyRevenueYearGrowth, OtcDate, PBR, PER, PaidInCapital, Phone, SpokesPerson, SpokesPersonTitle, StockTransferAgency, StockTransferAgencyPhone, SubIndustry, TseOtc, URL, VisaCertifiedPublicAccountants)
               VALUES ('""" + CMKey + """', %(Address)s, %(Business)s, %(ChairmanOfTheBoard)s, %(CompanyName)s, %(Date)s, %(DateOfEstablishment)s, %(DomesticShare)s, %(EnglishAbbreviation)s, %(ExportShare)s, %(GeneralManager)s, %(Industry)s, %(ListingDate)s, %(MarketPrice)s, %(MonthlyRevenue)s, %(MonthlyRevenueYearGrowth)s, %(OtcDate)s, %(PBR)s, %(PER)s, %(PaidInCapital)s, %(Phone)s, %(SpokesPerson)s, %(SpokesPersonTitle)s, %(StockTransferAgency)s, %(StockTransferAgencyPhone)s, %(SubIndustry)s, %(TseOtc)s, %(URL)s, %(VisaCertifiedPublicAccountants)s)
@@ -118,12 +125,14 @@ def insert_to_db(data, CMKey, data_type):
         _ = connection.execute(sql, data)
 
 
-@tenacity.retry(stop=tenacity.stop_after_attempt(10))
+@tenacity.retry(stop=tenacity.stop_after_attempt(30))
 async def get_url(i, cmkey, url, headers, crawl_type, session):
     proxy = random.choice(proxies)
     async with session.get(url, proxy=proxy, headers=headers) as response:
         r = await response.text()
         data = json.loads(r)
+        if crawl_type == 'mainstockimg':
+            data = data['KImage']
         print(i, len(data))
         if len(data) != 0:
             config.data += len(data)
@@ -136,8 +145,10 @@ async def run_asyncio(cmkeys_mapping, cmkeys, crawl_type):
     new_cmkeys = []
     for cmkey in cmkeys:
         referer = f"https://www.cmoney.tw/finance/{cmkeys_mapping[crawl_type][1]}.aspx?s={cmkey[0]}"
-        if crawl_type == '籌碼K線':
-            url = f"https://www.cmoney.tw/finance/ashx/MainPage.ashx?action={cmkeys_mapping[crawl_type][0]}&stockId={cmkey[0]}&cmkey={cmkeys_mapping[crawl_type][-1]}"
+        if crawl_type == '籌碼K線2':
+            url = f"https://www.cmoney.tw/finance/ashx/MainPage.ashx?action={cmkeys_mapping[crawl_type][0]}&stockId={cmkey[0]}&days=3&cmkey={cmkeys_mapping['籌碼K線'][-1]}"
+        elif crawl_type == '籌碼K線':
+            url = f"https://www.cmoney.tw/finance/ashx/MainPage.ashx?action={cmkeys_mapping[crawl_type][0]}&stockId={cmkey[0]}&days=3&cmkey={cmkeys_mapping[crawl_type][-1]}"
         else:
             url = f"https://www.cmoney.tw/finance/ashx/mainpage.ashx?action={cmkeys_mapping[crawl_type][0]}&stockId={cmkey[0]}&cmkey={cmkeys_mapping[crawl_type][-1]}"    
         headers.append({'referer': referer})
