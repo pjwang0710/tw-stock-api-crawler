@@ -26,6 +26,7 @@ total_one_minute_stick = Counter('crawl_one_minute_k_stick', 'Total one minute k
 total_five_seconds_exchange = Counter('crawl_five_seconds_exchange', 'Total five seconds exchange')
 total_brokers_exchange = Counter('crawl_brokers', 'Total brokers')
 total_tradersum = Counter('total_tradersum', 'crawl total_tradersum')
+total_tradersum_2 = Counter('total_tradersum_2', 'crawl total_tradersum')
 total_stock_info = Counter('total_stock_info', 'crawl total_stock_info')
 total_stock_revenue = Counter('total_stock_revenue', 'crawl total_stock_revenue')
 total_reinvestment = Counter('total_reinvestment', 'crawl total_reinvestment')
@@ -75,7 +76,7 @@ def run_crawl_tradersum():
 def run_crawl_tradersum_2():
     print('start crawling tradersum2 ...')
     crawl_data_length = cmoney_run('籌碼K線2')
-    total_tradersum.inc(crawl_data_length)
+    total_tradersum_2.inc(crawl_data_length)
     
 
 def run_crawl_stock_info():
